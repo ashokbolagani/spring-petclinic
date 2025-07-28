@@ -45,6 +45,27 @@ pipeline {
       }
     }
   }
+  sstage('SonarQube Analysis') {
+      steps {
+        echo "🔍 Starting SonarQube code scan..."
+
+        withSonarQubeEnv('Local-SonarQube') {
+          sh 'sonar-scanner -Dsonar.projectKey=petclinic-local -Dsonar.sources=src'
+        }
+      }
+    }
+
+    stage('SonarQube Quality Gate') {
+      steps {
+        echo "🚦 Checking SonarQube Quality Gate..."
+        timeout(time: 1, unit: 'MINUTES') {
+          waitForQualityGate abortPipeline: true
+        }
+      }
+    }
+  }
+
+
 
   post {
     always {
@@ -58,4 +79,5 @@ pipeline {
       echo "✅ Pipeline succeeded. Your build and secret scan are clean."
     }
   }
-}
+
+
