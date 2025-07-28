@@ -45,7 +45,7 @@ pipeline {
       }
     }
   }
-  sstage('SonarQube Analysis') {
+  stage('SonarQube Analysis') {
       steps {
         echo "🔍 Starting SonarQube code scan..."
 
